@@ -1,7 +1,0 @@
-On Windows:
-type this on the search: ODBC
-Navigate to the Drivers Tab:
-and iterate through the list of drivers until you find your ODBC driver version
-
-
-
