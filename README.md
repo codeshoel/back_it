@@ -1,5 +1,5 @@
 # BackIt
-BackIt is a project that provides solution to database backup, making the making up of database easy and seamless to enable developers focus more on programming prior to drive productivity.
+BackIt is a project that provides solution to database backing up, making database backup seamless to drive productivity.
 
 ## Features
 -   Backup single and multiple database
