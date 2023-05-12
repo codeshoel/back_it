@@ -1,2 +1,4 @@
 env
 *.sql
+app.py
+*.csv
