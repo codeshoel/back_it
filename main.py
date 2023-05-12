@@ -7,9 +7,9 @@ import pandas as pd
 
 # Create database backup
 host = 'localhost'
-user = 'database_username'
-password = 'your_database_password';
-database_name = 'database_name'
+user = 'root'
+password = 'wELCOME123'; #
+database_name = 'new_carbon'
 backup_file_name = f'{database_name}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
 
 
@@ -32,10 +32,10 @@ def backup_info(db_name, backup_file_name, *args, **kwargs):
 def backup_database():
 
     # Initiate server connection(i.e your remote server)
-    ftp = FTP('server', user='server_username', passwd='server_password', timeout=None)
+    ftp = FTP('192.168.1.69', user='crm', passwd='wELCOME123', timeout=None)
 
     # server directory where you want to upload file to.
-    ftp.cwd('back_it')
+    ftp.cwd('back_it/66')
 
     ftp.retrlines('LIST')
     print("login succeed.")
@@ -58,7 +58,7 @@ def backup_database():
 
         # Remove backup file after successfully uploading file to server.
         os.remove(backup_file_name)
-        # print("Done!")
+        print("Done!")
 
 
         
