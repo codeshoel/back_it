@@ -1,45 +1,24 @@
-# import os
-# import ftplib
-# from ftplib import all_errors
-# from ftplib import FTP
+import os
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
 
-
-# # ftp = FTP('192.168.1.69', user='crm', passwd='wELCOME123', timeout=None)
-# # ftp.cwd('back_it')
-
-# # ftp.retrlines('LIST')
-# # print("login succeed.")
-
-# # with open('README.md', "rb") as fp:
-# #     print(f'file: {fp}')
-# #     ftp.storbinary("STOR README.md", fp)
-# ftp.quit()
-# print('Logged out!')
+# database_backup (folder name)
+# folderId: https://drive.google.com/drive/folders/1rJFUBbi3FYm_qUW2vsexLTOe25bTQ3K2
 
 
 
+gauth = GoogleAuth()
+gauth.LocalWebserverAuth() # Create local webserver and auto handle authentication.
 
-# Backup datails generation in csv
-    # backup_info = {
-    #     'database': [database_name], 
-    #     'backup_file_name': [backup_file_name],
-    #     'created_at': [datetime.datetime.now()]
-    #     }
-    # backup_dataframe = pd.DataFrame(data=backup_info)
 
-    # Backup details file
-    # database_backup_info_file = os.path.abspath('backup.csv')
+drive = GoogleDrive(gauth)
 
-    # Generate csv file
-    # backup_dataframe.to_csv(database_backup_info_file, index=False)
+folder = '1rJFUBbi3FYm_qUW2vsexLTOe25bTQ3K2'
 
-   
 
-    # try:
-        
-
-    # except Exception as e:
-    #     print(e)
+file1 = drive.CreateFile({"title": [{'id': folder}], 'title': 'hello.txt'}) # Create GoogleDriveFile instance with title 'Hello.txt'.
+file1.SetContentString('Hello world!') # Set content of the file from given string.
+file1.Upload()
 
 
 
