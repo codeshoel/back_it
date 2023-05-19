@@ -4,6 +4,11 @@ from ftplib import all_errors
 from ftplib import FTP
 import pandas as pd
 
+from pydrive.auth import GoogleAuth
+from pydrive.drive import GoogleDrive
+
+
+
 
 def backup_info(db_name, backup_file_name, *args, **kwargs):
     # Backup datails generation in csv
@@ -40,22 +45,25 @@ def backup_to_google_drive(backup_file_name, file_path):
 
 def backup_database():
 
-    # Initiate server connection(i.e your remote server)
-    ftp = FTP('***', user='crm', passwd='***', timeout=None)
+    try:
 
-    # server directory where you want to upload file to.
-    ftp.cwd('back_it/dir')
+        # Initiate server connection(i.e your remote server)
+        ftp = FTP('192.168.1.69', user='crm', passwd='wELCOME123', timeout=None)
+
+        # server directory where you want to upload file to.
+        dir_on_server = 'back_it/66'
+        ftp.cwd(dir_on_server)
 
         ftp.retrlines('LIST')
         print("login succeed.")
 
-    try:
-        # Create database backup
-        host = 'localhost'
-        user = 'root'
-        password = '123456';
-        database_list = ('g-store', 'ticketing_system')
-        # backup_file_name = f'{database_list}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
+        try:
+            # Create database backup
+            host = 'localhost'
+            user = 'root'
+            password = 'wELCOME123'
+            database_list = ('new_carbon', 'migo')
+            # backup_file_name = f'{database_list}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
 
             # if you want all the database on the server replace database name with --all-databases cmd
             # -h: server, -u: user, -p: password(ensure your -p&yourpassword are written in one word(e.g -p123456))
@@ -63,6 +71,8 @@ def backup_database():
                 backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
                 os.system(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}')
                 
+                print(f'Currently backing up {database}...')
+
                 # File to be backed up on the cloud
                 # open(filename, rb)
                 with open(f'{backup_file_name}', "rb") as fp:
@@ -74,11 +84,11 @@ def backup_database():
                     # backup to Google drive
                     backup_to_google_drive(backup_file_name, backup_file_name)
 
+                    # Remove backup file after successfully uploading file to server.
+                    os.remove(backup_file_name)
+
                 # Close the file after reading from it.
                 fp.close()
-
-            # Remove backup file after successfully uploading file to server.
-            os.remove(backup_file_name)
             print("Done!")
 
 
