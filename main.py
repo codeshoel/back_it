@@ -7,6 +7,10 @@ import pandas as pd
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
+# from pyzip import PyZip
+from zipfile import ZipFile
+
+
 
 def backup_info(db_name, backup_file_name, *args, **kwargs):
     # Backup datails generation in csv
@@ -43,11 +47,12 @@ def backup_info(db_name, backup_file_name, *args, **kwargs):
 
 def backup_database():
 
-    # Initiate server connection(i.e your remote server)
-    ftp = FTP('***', user='crm', passwd='***', timeout=None)
+    try:
+        # Initiate server connection(i.e your remote server)
+        ftp = FTP('192.168.1.69', user='crm', passwd='wELCOME123', timeout=None)
 
-    # server directory where you want to upload file to.
-    ftp.cwd('back_it/dir')
+        # server directory where you want to upload file to.
+        ftp.cwd('back_it/test_dir')
 
         ftp.retrlines('LIST')
         print("login succeed.")
@@ -58,7 +63,10 @@ def backup_database():
             user = 'root'
             password = '123456';
             database_list = ('g-store', 'ticketing_system')
-            # backup_file_name = f'{database_list}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
+
+            # Zip file name
+            zipFile_name = f'backup-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.zip'
+
 
             # if you want all the database on the server replace database name with --all-databases cmd
             # -h: server, -u: user, -p: password(ensure your -p&yourpassword are written in one word(e.g -p123456))
@@ -94,9 +102,9 @@ def backup_database():
             # Close the file after reading from it.
             fp.close()
 
-                # Remove backup file after successfully uploading file to server.
-                os.remove(backup_file_name)
-                print("Done!")
+            # Remove backup file after successfully uploading file to server.
+            os.remove(zipFile_name)
+            print("Done!")
 
         except all_errors as xe:
             print(xe)
