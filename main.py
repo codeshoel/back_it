@@ -7,6 +7,10 @@ import pandas as pd
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
+# from pyzip import PyZip
+from zipfile import ZipFile
+
+
 
 def backup_info(db_name, backup_file_name, *args, **kwargs):
     # Backup datails generation in csv
@@ -24,21 +28,21 @@ def backup_info(db_name, backup_file_name, *args, **kwargs):
     backup_dataframe.to_csv(database_backup_info_file, mode='a', index=False, header=False)
 
 
-def backup_to_google_drive(backup_file_name, file_path):
-    gauth = GoogleAuth()
-    gauth.LocalWebserverAuth() # Create local webserver and auto handle authentication.
+# def backup_to_google_drive(backup_file_name, file_path):
+#     gauth = GoogleAuth()
+#     gauth.LocalWebserverAuth() # Create local webserver and auto handle authentication.
 
     # Authenticate user 
-    drive = GoogleDrive(gauth)
+    # drive = GoogleDrive(gauth)
 
     # folder credential
     # folderId: https://drive.google.com/drive/folders/1rJFUBbi3FYm_qUW2vsexLTOe25bTQ3K2
-    folder = '1s3QN1PLCKDCWmT0ICgG-CW8_02W7qkwb'
+    # folder = '1s3QN1PLCKDCWmT0ICgG-CW8_02W7qkwb'
 
 
-    file1 = drive.CreateFile({"parents": [{'id': folder}], 'title': backup_file_name}) # Create GoogleDriveFile instance with title 'Hello.txt'.
-    file1.SetContentFile(file_path) # Set content of the file from given string.
-    file1.Upload()
+    # file1 = drive.CreateFile({"parents": [{'id': folder}], 'title': backup_file_name}) # Create GoogleDriveFile instance with title 'Hello.txt'.
+    # file1.SetContentFile(file_path) # Set content of the file from given string.
+    # file1.Upload()
 
 
 def backup_database():
@@ -59,34 +63,49 @@ def backup_database():
             user = 'root'
             password = '123456';
             database_list = ('g-store', 'ticketing_system')
-            # backup_file_name = f'{database_list}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
+
+            # Zip file name
+            zipFile_name = f'backup-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.zip'
+
 
             # if you want all the database on the server replace database name with --all-databases cmd
             # -h: server, -u: user, -p: password(ensure your -p&yourpassword are written in one word(e.g -p123456))
             for database in database_list:
                 backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
                 os.system(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}')
+
+
+            # list all .sql file in parant dir and compress to zip file
+            file_in_dir = os.listdir()
+            with ZipFile(f'{zipFile_name}', "w") as newzip:
+                for file in file_in_dir:
+                    if file.endswith('.sql'):
+                        newzip.write(file)
+
+                        # Remove file after 
+                        os.remove(file)
+            newzip.close()
+
+
+
+            # File to be backed up on the cloud
+            with open(f'{zipFile_name}', "rb") as fp:
+                # backup to remote server.
+                ftp.storbinary(f"STOR {zipFile_name}", fp)
                 
-                # File to be backed up on the cloud
-                # open(filename, rb)
-                with open(f'{backup_file_name}', "rb") as fp:
-                    
-                    # backup to remote server.
-                    ftp.storbinary(f"STOR {backup_file_name}", fp)
-                    backup_info(database, backup_file_name)
+                # Information about the backup
+                backup_info(database, zipFile_name.replace('.zip', ''))
 
-                    # backup to Google drive
-                    backup_to_google_drive(backup_file_name, backup_file_name)
+                # backup to Google drive
+                # backup_to_google_drive(backup_file_name, backup_file_name)
 
-                # Close the file after reading from it.
-                fp.close()
+            # Close the file after reading from it.
+            fp.close()
 
-                # Remove backup file after successfully uploading file to server.
-                os.remove(backup_file_name)
-                print("Done!")
+            # Remove backup file after successfully uploading file to server.
+            os.remove(zipFile_name)
+            print("Done!")
 
-
-            
         except all_errors as xe:
             print(xe)
 
