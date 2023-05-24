@@ -41,7 +41,7 @@ def backup_info(db_name, backup_file_name, *args, **kwargs):
 def backup_database():
 
     # Initiate server connection(i.e your remote server)
-    ftp = FTP('***', user='crm', passwd='***', timeout=None)
+    ftp = FTP('192.168.1.66', user='crm', passwd='wELCOME123', timeout=None)
 
     try:
         # server directory where you want to upload file to.
@@ -54,8 +54,8 @@ def backup_database():
             # Create database backup
             host = 'localhost'
             user = 'root'
-            password = '123456';
-            database_list = ('g-store', 'ticketing_system')
+            password = 'wELCOME1234'
+            database_list = ('new_carbon', 'migo')
             # backup_file_name = f'{database_list}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
 
             # if you want all the database on the server replace database name with --all-databases cmd
