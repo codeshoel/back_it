@@ -1,30 +1,36 @@
 import os
+import smtplib
+import subprocess
 import datetime
 from ftplib import all_errors
 from ftplib import FTP
-import pandas as pd
-
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
-
-from zipfile import ZipFile
 
 
+# import pandas as pd
 
-def backup_info(db_name, backup_file_name, *args, **kwargs):
+# from pydrive.auth import GoogleAuth
+# from pydrive.drive import GoogleDrive
+
+
+# The new  mail group chat for the crm team is 
+# crmteam@interranetworks.com
+
+
+
+# def backup_info(db_name, backup_file_name, *args, **kwargs):
     # Backup datails generation in csv
-    backup_info = {
-        'Database Name': [db_name], 
-        'Backed up file name': [backup_file_name],
-        'Created at': [datetime.datetime.now()]
-        }
-    backup_dataframe = pd.DataFrame(data=backup_info)
+    # backup_info = {
+    #     'Database Name': [db_name], 
+    #     'Backed up file name': [backup_file_name],
+    #     'Created at': [datetime.datetime.now()]
+        
+    # backup_dataframe = pd.DataFrame(data=backup_info)
 
     # Backup details file
-    database_backup_info_file = os.path.abspath('database_backup_info.csv')
+    # database_backup_info_file = os.path.abspath('database_backup_info.csv')
 
     # Generate csv file
-    backup_dataframe.to_csv(database_backup_info_file, mode='a', index=False, header=False)
+    # backup_dataframe.to_csv(database_backup_info_file, mode='a', index=False, header=False)
 
 
 # def backup_to_google_drive(backup_file_name, file_path):
@@ -44,75 +50,164 @@ def backup_info(db_name, backup_file_name, *args, **kwargs):
     # file1.Upload()
 
 
+def send_report():
+
+    sender = 'from@example.com'
+    receivers = ['to@example.com']
+    message = """From: From Person <from@example.com>
+    To: To Person <to@example.com>
+    Subject: SMTP email example
+
+
+    This is a test message.
+    """
+
+    try:
+        smtpObj = smtplib.SMTP('localhost')
+        smtpObj.sendmail(sender, receivers, message)         
+        print("Successfully sent email")
+    except smtplib.SMTPException:
+        pass
+
+
+
 def backup_database():
 
+    try:
+        # Create database backup
+        host = 'localhost'
+        user = 'root'
+        password = 'wELCOME123'
+        database_list = (
+            'carboncrm', 
+            # 'campaign', 
+            # 'fairmoneydb', 
+            # 'ferma', 
+            # 'hometown', 
+            # 'migocrm', 
+            # 'nigsims',
+            # 'nphcda',
+            # 'kncvdb',
+            # 'storm',
+            # 'yanacrm',
+            # 'jobberman',
+            # 'intrustcrm',
+            # 'pollcrm',
+            )
+
+        # Zip file name
+        zipFile_name = f'backup-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.zip'
+
+        # Start backup process
+        start_backup(database_list, host, user, password)
+
+        # Zip backup list
+        zip_backup_files(zipFile_name)
+
+        # Transfer backup file to a remote backup server
+        ftp_transfer_backup_file(zipFile_name)
+
+    except all_errors as xe:
+        log_error(xe)
+
+
+def start_backup(database_list, host, user, password):
+
+    # Get current date from timestamping backup
+    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+
+    # if you want all the database on the server replace database name with --all-databases cmd
+    # -h: server, -u: user, -p: password(ensure your -p&yourpassword are written in one word(e.g -p123456))
+    for database in database_list:
+        print(f'backing up: {database}...')
+
+        # Daily incremental backup
+        backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d")}.sql'
+        subprocess.run(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}', shell=True)
+        
+        # Monthly or Yearly full backup
+        if current_date.endswith('-01'):
+            backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d")}.sql'
+            subprocess.run(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}', shell=True)
+
+        if current_date.endswith('-01'):
+            backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d")}.sql'
+            subprocess.run(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}', shell=True)
+
+def zip_backup_files(zipFile_name):
+    from zipfile import ZipFile
+
+    try:
+        # list all .sql file in parant dir and compress to zip file
+        file_in_dir = os.listdir()
+        with ZipFile(f'{zipFile_name}', "w") as newzip:
+            for file in file_in_dir:
+                if file.endswith('.sql'):
+                    newzip.write(file)
+
+                    # Remove file after 
+                    os.remove(file)
+        newzip.close()
+    except Exception as xe:
+        log_error(xe)
+
+def ftp_transfer_backup_file(zipFile_name):
     try:
         # Initiate server connection(i.e your remote server)
         ftp = FTP('192.168.1.69', user='crm', passwd='wELCOME123', timeout=None)
 
         # server directory where you want to upload file to.
-        ftp.cwd('back_it/test_dir')
+        ftp.cwd('back_it/64')
 
         ftp.retrlines('LIST')
         print("login succeed.")
 
+        status = []
+        # File to be backed up on the cloud
+        with open(f'{zipFile_name}', "rb") as fp:
+            # backup to remote server.
+            if ftp.storbinary(f"STOR {zipFile_name}", fp):
+                status.append('Success')
+            else:
+                status.append('Fail')
+            # Information about the backup
+            # backup_info(database, zipFile_name.replace('.zip', ''))
+
+            # backup to Google drive
+            # backup_to_google_drive(backup_file_name, backup_file_name)
+
+        # Close the file after reading from it.
+        fp.close()
+        print(status)
+        # Remove backup file after successfully uploading file to server.
         try:
-            # Create database backup
-            host = 'localhost'
-            user = 'root'
-            password = '123456';
-            database_list = ('g-store', 'ticketing_system')
-
-            # Zip file name
-            zipFile_name = f'backup-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.zip'
-
-
-            # if you want all the database on the server replace database name with --all-databases cmd
-            # -h: server, -u: user, -p: password(ensure your -p&yourpassword are written in one word(e.g -p123456))
-            for database in database_list:
-                backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
-                os.system(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}')
-
-
-            # list all .sql file in parant dir and compress to zip file
-            file_in_dir = os.listdir()
-            with ZipFile(f'{zipFile_name}', "w") as newzip:
-                for file in file_in_dir:
-                    if file.endswith('.sql'):
-                        newzip.write(file)
-
-                        # Remove file after 
-                        os.remove(file)
-            newzip.close()
-
-
-
-            # File to be backed up on the cloud
-            with open(f'{zipFile_name}', "rb") as fp:
-                # backup to remote server.
-                ftp.storbinary(f"STOR {zipFile_name}", fp)
-                
-                # Information about the backup
-                backup_info(database, zipFile_name.replace('.zip', ''))
-
-                # backup to Google drive
-                # backup_to_google_drive(backup_file_name, backup_file_name)
-
-            # Close the file after reading from it.
-            fp.close()
-
-            # Remove backup file after successfully uploading file to server.
             os.remove(zipFile_name)
             print("Done!")
+        except OSError as xe:
+            log_error(xe)
 
-        except all_errors as xe:
-            print(xe)
+    except all_errors as xe:
+            log_error(xe)
 
-        finally:
-            # logout
-            ftp.quit()
-    except all_errors as ex:
-        print(f'ftpError: {ex}')
+    finally:
+        # logout
+        print("logged out successfully..!")
+        ftp.quit()
+
+
+def log_error(error):
+    import logging
+    try:
+        logging.basicConfig(
+        filename='error.log', 
+        level=logging.ERROR, 
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+
+        return logging.error(f"log[EXCEPTION]: {error}", exc_info=True)
+         
+    except Exception as e:
+        return e
 
 
 if __name__ == '__main__':
