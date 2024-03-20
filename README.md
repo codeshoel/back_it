@@ -1,18 +1,18 @@
 # BackIt
-BackIt is a project that provides solution to database backing up, making database backup seamless to drive productivity.
+This project provides a solution to database backing up, making database backup seamless to drive productivity.
 
 ## Features
--   Backup single and multiple database
--   Transfer backed up database to remote server.
--   Generate report for backup database in csv format.
+-   Backup single and multiple databases
+-   Transfer the backed-up database to a remote server.
+-   Generate a report for the backup database in CSV format.
 
 ### Installation
-To install and run BackIt, follow these installation guid:
+To install and run BackIt, follow these installation guides:
 1. Clone the repository:
 ```bash git clone https://github.com/codeshoel/back_it.git```
 2. Install dependencies:
 ```bash pip install -r requirements.txt```
-3. Add mysqldump to system environment
+3. Add mysqldump to the system environment
 ## On Windows
 -   For Xampp server
     ```C:\xampp\mysql\bin```
@@ -22,7 +22,7 @@ To install and run BackIt, follow these installation guid:
 ```bash py main.py```
 
 # Food for thought:
--   Make sure the database is passworded if you enttend running with Task Scheduler.
+-   Make sure the database is passworded if you intend to run with Task Scheduler.
 
 
 
