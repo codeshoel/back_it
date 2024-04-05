@@ -1,6 +1,6 @@
 env
-/*.sql
-/app.py
-/*.csv
-/credentials.json
+*.sql
+app.py
+*.csv
+credentials.json
 error.log
