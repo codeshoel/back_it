@@ -1,5 +1,10 @@
+# Folders
 env
-/*.sql
-/app.py
-/*.csv
-/credentials.json
+storage
+
+# Files
+*.sql
+app.py
+*.csv
+*.json
+*.yaml
