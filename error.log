@@ -1,0 +1,170 @@
+2023-11-08 16:55:55,971 - root - ERROR - log[EXCEPTION]: [WinError 10053] An established connection was aborted by the software in your host machine
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 135, in backup_database
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+2023-11-08 16:55:55,976 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 160, in backup_database
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-09 11:28:25,578 - root - ERROR - log[EXCEPTION]: [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 183, in ftp_transfer_backup_file
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2023-11-09 11:28:25,584 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 137, in backup_database
+    ftp_transfer_backup_file(zipFile_name)
+  File "C:\python-backup-script\back_it\main.py", line 208, in ftp_transfer_backup_file
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-09 16:31:05,282 - root - ERROR - log[EXCEPTION]: [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 169, in ftp_transfer_backup_file
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2023-11-09 16:31:05,282 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 108, in backup_database
+    ftp_transfer_backup_file(zipFile_name)
+  File "C:\python-backup-script\back_it\main.py", line 195, in ftp_transfer_backup_file
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-10 16:32:26,527 - root - ERROR - log[EXCEPTION]: [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 169, in ftp_transfer_backup_file
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2023-11-10 16:32:28,760 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 108, in backup_database
+    ftp_transfer_backup_file(zipFile_name)
+  File "C:\python-backup-script\back_it\main.py", line 195, in ftp_transfer_backup_file
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-11 16:32:28,775 - root - ERROR - log[EXCEPTION]: [WinError 10053] An established connection was aborted by the software in your host machine
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 169, in ftp_transfer_backup_file
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionAbortedError: [WinError 10053] An established connection was aborted by the software in your host machine
+2023-11-11 16:32:28,854 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 108, in backup_database
+    ftp_transfer_backup_file(zipFile_name)
+  File "C:\python-backup-script\back_it\main.py", line 195, in ftp_transfer_backup_file
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-12 16:32:30,666 - root - ERROR - log[EXCEPTION]: [WinError 10054] An existing connection was forcibly closed by the remote host
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 169, in ftp_transfer_backup_file
+    if ftp.storbinary(f"STOR {zipFile_name}", fp):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 503, in storbinary
+    conn.sendall(buf)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2023-11-12 16:32:30,760 - root - ERROR - log[EXCEPTION]: 425 Error writing to file: 5
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 108, in backup_database
+    ftp_transfer_backup_file(zipFile_name)
+  File "C:\python-backup-script\back_it\main.py", line 195, in ftp_transfer_backup_file
+    ftp.quit()
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 659, in quit
+    resp = self.voidcmd('QUIT')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 252, in getresp
+    raise error_temp(resp)
+ftplib.error_temp: 425 Error writing to file: 5
+2023-11-15 16:32:51,558 - root - ERROR - log[EXCEPTION]: 550 Couldn't open the file or directory
+Traceback (most recent call last):
+  File "C:\python-backup-script\back_it\main.py", line 160, in ftp_transfer_backup_file
+    ftp.cwd('back_it/64')
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 625, in cwd
+    return self.voidcmd(cmd)
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 286, in voidcmd
+    return self.voidresp()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 259, in voidresp
+    resp = self.getresp()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python311\Lib\ftplib.py", line 254, in getresp
+    raise error_perm(resp)
+ftplib.error_perm: 550 Couldn't open the file or directory

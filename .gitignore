@@ -1,10 +1,8 @@
 # Folders
 env
-storage
 
 # Files
 *.sql
 app.py
 *.csv
 *.json
-*.yaml
