@@ -1,5 +1,7 @@
 env
-/*.sql
-/app.py
-/*.csv
-/credentials.json
+*.sql
+app.py
+*.csv
+credentials.json
+crm-backup-project-1852798251c6.json
+settings.yaml
