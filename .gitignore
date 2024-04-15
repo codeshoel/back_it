@@ -1,8 +1,11 @@
 # Folders
 env
-
-# Files
 *.sql
 app.py
 *.csv
-*.json
+credentials.json
+crm-backup-project-1852798251c6.json
+settings.yaml
+
+
+
