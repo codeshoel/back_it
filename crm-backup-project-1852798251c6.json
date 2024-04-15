@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "crm-backup-project",
+  "private_key_id": "1852798251c60db08d9011b8cfe6e6a96792847a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCT3tbK5hQiMPc+\nQ+yRaxc6pKcyd+EmSrf+3X4C3a0J1a4fvxfx76Kb+PZE8TQwObr3YG+p8deoDioR\nsBIwCayEIGfqHgCO6nqtFRupP94clTdrloaQ2ciMa11bfCZIq/Sx+JqrEPlA9S2l\nT5iyjkTHxJ5JY2lMxV9uM9ZMZDd+hUkyaHuKTBFKs9v+wBCyv90itjyrueOi2qjQ\n0kLRreX9CdOyyjsZjQf2kT8yXCNTjGN6dshBKV1fGscX8IPqbCpUPDi3NgdfUlhg\nP3pVgreWZWuz71y9Lg7MrqJa9DLpBMugkVtCjitu5UwScTlsXtO+0oK5ZshfI8UG\nf3d90tfZAgMBAAECggEAAsqA+WFwXdjYwdccXv5LePLkqQI0QLnGUUwy9bDjdD0R\nRU4hEJL6WcFQPKrk1kgwrDyovudur6Bc0Oqm3TtBg1jtPTEFx6zLVfsBA6fN9HIo\nkqJLte42Z9ga8gAc5OBCBR3xJWtzmPNHwkgHVM90ouSmLDJxKV7MV1MpJ1X46i1o\ngc7MwmUDN1ILpmDperFIiXG8JJFPW4KbEC71qw/0zUV9B7muV7Sl9eO6l++YWB18\nmeCCDBHOhAQfEmc1UgCYmkTu5a/Q6r+roRsL5r/lYcTrvoxYhtfJuY7OGPFNEo1W\nbNYG8DNWzLrC6uyfmoIwxIsPLprM4JehLLsGfK0CAQKBgQDOQWms7M/2OH6H/D06\nirF9umk1XxUWVMfgkV2kmcY0Fgyt8SB+lo351NQl/lkq3EHDqQ8d09kRQA/0Eaqm\n5jwlEjglO+oc32as4Ub0y4Z0bfJZVJvOijMS2iTmsCGsL7m8hNNFC6ImZyWpXM6m\nO7dsH3ecwUKCkR4r2CLBL25vwQKBgQC3iKC7vgYEPMlOIJwdORNKxMCX5XzgLML8\npoNXpKH66MqWtU4/2K0r0lVQvFqpDmbUGgXLAYWR5p6R7tRNwwPQg01NgcV6oOlQ\nsLTYxqoTNt+djd87lguhOxGQrGVAmOx8jNoScTmgb++4tiTYfePHFSWPvV7yh1ii\na18miUVuGQKBgCzZpowW1sX41PLnE71mKWBop7YWXfSELQ6VLaK8WZA79zffxiwg\nuvDHqfY1D9i1GovceFAJIBuTLaTqLoyqZgu9oX3fQHJU1fPj7NUQaMVqnxdzwYmx\nHZgM3ZdYV4okuqPW0kYiWHk3VsY0Sy90rtcRJKZuk/LmcYQhNLWDheVBAoGBAKwz\nQywjpJ2BMxdcvV0l2hYC+PkL1ti25tQKn50x2NEEbmBtCFgbQo+lL2sq7p1D5/MF\n332TlfFIwmsF/KhhW0jeiT85jUH7jC2rPmNOMvEIQVMgc90CcTL7qwVk2zN6yBgs\nR8eZ+ImxvOg/7d46b+awzqdI9Lb1ipIJ0CLmFQCxAoGBAMign1QGoIbsckx6qu1w\nBAuUJV8AphbG9ltLkQqHvPHglfHYICs2kEvAzqGnRbduUnLbeb+CmABuLrS9wPzr\n4A7XrKjhiSvAG56cwpUB4GLVawHXYyI14XlG7UIHBVI/mnYyhcPnjkb4Fbqp+YFe\nUITaFF7Gv1lSvxWk+NYt2N5n\n-----END PRIVATE KEY-----\n",
+  "client_email": "crm-backup@crm-backup-project.iam.gserviceaccount.com",
+  "client_id": "116226198636716656837",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/crm-backup%40crm-backup-project.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
