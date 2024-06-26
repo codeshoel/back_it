@@ -1,9 +1,9 @@
+from email.mime.text import MIMEText
 import os
 import datetime
 import smtplib
-from email.message import EmailMessage
-from ftplib import all_errors
-from ftplib import FTP
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 import pandas as pd
 from dotenv import dotenv_values
 from googleapiclient.discovery import build
@@ -11,24 +11,34 @@ from google.oauth2 import service_account
 from googleapiclient.http import MediaFileUpload
 from zipfile import ZipFile
 
-# Google drive setup
-SCOPE = ['https://www.googleapis.com/auth/drive']
-SERVICE_ACCOUNT_FILE = 'crm-backup-project-1852798251c6.json'
-PARENT_FOLDER_ID = "15PEd1WBOJg6L9HsSisurN4DWM6ucVwi1"
+env = dotenv_values('.env')
 
-def send_email(server, message):
-    env = dotenv_values('.env')
+# Google drive setup
+SCOPE = env.get('SCOPE').split(',')
+SERVICE_ACCOUNT_FILE = env.get('SERVICE_ACCOUNT_FILE')
+PARENT_FOLDER_ID = env.get('PARENT_FOLDER_ID')
+FULL_BACKUP_FOLDER_ID = env.get('FULL_BACKUP_FOLDER_ID')
+INCREMENTAL_BACKUP_FOLDER_ID = env.get('INCREMENTAL_BACKUP_FOLDER_ID')
+BACKUP_LOG_FILE = env.get('BACKUP_LOG_FILE')
+BACKUP_TYPE = int(env.get('BACKUP_TYPE'))
+
+def send_email_with_log(message):
     if env:
         email_addr = env.get('EMAIL_ADDR')
         password = env.get('PASSWORD')
 
-        email = EmailMessage()
+        email = MIMEMultipart()
         email['From'] = email_addr
-        email['To'] = email_addr #crmspport@interranetworks.com
+        email['To'] = email_addr
         email['Subject'] = 'CRM 64 Backup Report'
-        email.set_content(message)
+        email.attach(MIMEText(message, 'plain'))
 
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        with open(BACKUP_LOG_FILE, "rb") as f:
+            attach = MIMEApplication(f.read(), _subtype="csv")
+            attach.add_header('Content-Disposition', 'attachment', filename=BACKUP_LOG_FILE)
+            email.attach(attach)
+
+        with smtplib.SMTP(env.get('DOMAIN'), env.get('OUTGOING_PORT')) as server:
             server.starttls()
             server.login(email_addr, password)
             server.send_message(email)
@@ -48,15 +58,18 @@ def delete_file_older_than(dir, days):
             else:
                 print(f"No file was deleted because no file is older than {cutoff_date}.")
 
-def backup_info(db_name, backup_file_name, *args, **kwargs):
+def backup_info(db_name, backup_file_name, start_time, end_time, last_operation):
     backup_info = {
-        'Database Name': [db_name], 
-        'Backed up file name': [backup_file_name],
-        'Created at': [datetime.datetime.now()]
+        'name': [backup_file_name],
+        'start datetime': [start_time],
+        'end datetime': [end_time],
+        'last operation': [last_operation]
     }
     backup_dataframe = pd.DataFrame(data=backup_info)
-    database_backup_info_file = os.path.abspath('database_backup_info.csv')
-    backup_dataframe.to_csv(database_backup_info_file, mode='a', index=False, header=False)
+    if not os.path.exists(BACKUP_LOG_FILE):
+        backup_dataframe.to_csv(BACKUP_LOG_FILE, mode='w', index=False)
+    else:
+        backup_dataframe.to_csv(BACKUP_LOG_FILE, mode='a', index=False, header=False)
 
 def authentication():
     creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPE)
@@ -67,7 +80,8 @@ def upload_backup_to_google_drive(backup_file_name, file_path):
     service = build('drive', 'v3', credentials=creds)
     
     try:
-        folder = service.files().get(fileId=PARENT_FOLDER_ID).execute()
+        _folder = FULL_BACKUP_FOLDER_ID if BACKUP_TYPE == 0 else INCREMENTAL_BACKUP_FOLDER_ID
+        folder = service.files().get(fileId=_folder).execute()
         print(f"Folder found: {folder['name']}")
     except Exception as e:
         print(f"Error verifying folder ID: {e}")
@@ -75,7 +89,7 @@ def upload_backup_to_google_drive(backup_file_name, file_path):
 
     file_metadata = {
         'name': backup_file_name,
-        'parents': [PARENT_FOLDER_ID]
+        'parents': [_folder]
     }
 
     media = MediaFileUpload(file_path, resumable=True)
@@ -91,33 +105,70 @@ def upload_backup_to_google_drive(backup_file_name, file_path):
     except Exception as e:
         print(f"Error uploading file: {e}")
 
+def get_last_backup_time():
+    if os.path.exists(BACKUP_LOG_FILE):
+        df = pd.read_csv(BACKUP_LOG_FILE)
+        last_backup = df['end datetime'].max()
+        return datetime.datetime.strptime(last_backup, '%Y-%m-%d %H:%M:%S')
+    return None
+
 def backup_database():
     try:
-        host = 'localhost'
-        user = 'root'
-        password = 'wELCOME123'
-        database_list = ('ntpmerge', 'campaign', 'carbon', 'carboncrm', 'fairmoneydb', 'ferma', 'health', 'hometown', 'intrustcrm', 'maiguard', 'migo', 'nigsims', 'nphcda', 'ntp', 'ordermgt', 'pollcrm', 'sme', 'yanacrm',)
+        host = env.get('HOST')
+        user = env.get('USER')
+        password = env.get('PASSWORD')
+        database_list = ('campaign', 'carbon', 'carboncrm', 'fairmoneydb', 'ferma', 'health', 'hometown', 'intrustcrm', 'maiguard', 'migo', 'nigsims', 'nphcda', 'ntp', 'ordermgt', 'pollcrm', 'sme', 'yanacrm',)
+        port=env.get('PORT')
+
+        last_backup_time = get_last_backup_time()
+        current_time = datetime.datetime.now()
+        
+        all_backups_successful = True
+        backup_message = ""
 
         for database in database_list:
-            backup_file_name = f'{database}-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.sql'
-            os.system(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}')
+            start_time = datetime.datetime.now()
             
-            zipFile_name = f'{database}-backup-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.zip'
-            
-            with ZipFile(f'{zipFile_name}', "w") as newzip:
-                newzip.write(backup_file_name)
-                os.remove(backup_file_name)
-            newzip.close()
+            if last_backup_time:
+                # Incremental backup since last backup
+                backup_file_name = f'{database}-incremental-{current_time.strftime("%Y-%m-%d_%H-%M-%S")}.sql'
+                # os.system(f'mysqldump -h {host} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick --where="timestamp > \'{last_backup_time.strftime("%Y-%m-%d %H:%M:%S")}\'" > {backup_file_name}')
+                os.system(f'mysqldump -h {host} -P {port} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick --where="timestamp > \'{last_backup_time.strftime("%Y-%m-%d %H:%M:%S")}\'" > {backup_file_name}')
 
-            with open(f'{zipFile_name}', "rb") as fp:
-                backup_info(database, zipFile_name.replace('.zip', ''))
+                last_operation = 'incremental'
+                BACKUP_TYPE = 1
+            else:
+                # Full backup
+                backup_file_name = f'{database}-full-{current_time.strftime("%Y-%m-%d_%H-%M-%S")}.sql'
+                os.system(f'mysqldump -h {host} -P {port} -u {user} -p{password} --no-tablespaces {database} --single-transaction --quick > {backup_file_name}')
+                last_operation = 'full'
+                BACKUP_TYPE = 0
+            
+            zipFile_name = f'{database}-backup-{current_time.strftime("%Y-%m-%d_%H-%M-%S")}.zip'
+            
+            try:
+                with ZipFile(f'{zipFile_name}', "w") as newzip:
+                    newzip.write(backup_file_name)
+                    os.remove(backup_file_name)
+                newzip.close()
+
+                backup_info(database, zipFile_name.replace('.zip', ''), start_time, datetime.datetime.now(), last_operation)
                 upload_backup_to_google_drive(zipFile_name, zipFile_name)
 
-            os.remove(zipFile_name)
+                os.remove(zipFile_name)
+            except Exception as e:
+                all_backups_successful = False
+                backup_message += f"Error backing up database {database}: {e}\n"
+
+        if all_backups_successful:
+            backup_message += "All databases backed up successfully."
+            send_email_with_log(backup_message)
+
         print("Done!")
 
     except Exception as e:
         print(f"Error: {e}")
+        send_email_with_log(f"Backup process encountered an error: {e}")
 
 if __name__ == '__main__':
     backup_database()
