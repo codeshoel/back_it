@@ -28,9 +28,9 @@ To install and run BackIt, follow these installation guides:
 ## Potential Error and How to Fix:
 
 - If faced with package installation error: 
-``pip._vendor.pyproject_hooks._impl.BackendUnavailable: Cannot import 'setuptools.build_meta``
+    - ``pip._vendor.pyproject_hooks._impl.BackendUnavailable: Cannot import 'setuptools.build_meta``
 
-```bash python.exe -m pip install --upgrade pip setuptools wheel ```
+    - ```bash python.exe -m pip install --upgrade pip setuptools wheel ```
 
 # OR
 
