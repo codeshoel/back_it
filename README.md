@@ -41,7 +41,7 @@ To install and run BackIt, follow these installation guides:
     - ```bash python.exe -m pip install -r requirements.txt ```
 
 # Add the following environment variables in your .env
-''' # EMAIL CONFIGURATION SETTINGS
+``` # EMAIL CONFIGURATION SETTINGS
 DOMAIN=
 INCOMING_PORT=
 OUTGOING_PORT=
@@ -65,5 +65,4 @@ BACKUP_TYPE = 0
 HOST=localhost
 PORT=
 USER=
-PASSWORD= 
-'''
+PASSWORD= ```
