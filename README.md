@@ -25,7 +25,14 @@ To install and run BackIt, follow these installation guides:
 -   Make sure the database is passworded if you intend to run with Task Scheduler.
 
 
+## Potential Error and How to Fix:
 
+- If faced with package installation error: pip._vendor.pyproject_hooks._impl.BackendUnavailable: Cannot import 'setuptools.build_meta
+```bash python.exe -m pip install --upgrade pip setuptools wheel ```
 
+# OR
 
+```bash python.exe -m pip install --force-reinstall pip setuptools wheel ```
 
+## Reinstall the packages:
+```bash python.exe -m pip install -r requirements.txt ```
