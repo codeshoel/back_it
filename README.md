@@ -34,7 +34,8 @@ To install and run BackIt, follow these installation guides:
 
 # OR
 
-```bash python.exe -m pip install --force-reinstall pip setuptools wheel ```
+- Run:
+    - ```bash python.exe -m pip install --force-reinstall pip setuptools wheel ```
 
-## Reinstall the packages:
-```bash python.exe -m pip install -r requirements.txt ```
+- Reinstall the packages:
+    - ```bash python.exe -m pip install -r requirements.txt ```
