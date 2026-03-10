@@ -39,3 +39,31 @@ To install and run BackIt, follow these installation guides:
 
 - Reinstall the packages:
     - ```bash python.exe -m pip install -r requirements.txt ```
+
+# Add the following environment variables in your .env
+''' # EMAIL CONFIGURATION SETTINGS
+DOMAIN=
+INCOMING_PORT=
+OUTGOING_PORT=
+ENABLE=ssl
+
+
+# EMAIL CREDENTIALS
+EMAIL_ADDR=
+PASSWORD=
+
+#Google Drive Settings
+SCOPE = 
+SERVICE_ACCOUNT_FILE = 
+PARENT_FOLDER_ID = 
+FULL_BACKUP_FOLDER_ID = 
+INCREMENTAL_BACKUP_FOLDER_ID = 
+BACKUP_LOG_FILE = 'backup_log.csv'
+BACKUP_TYPE = 0
+
+# Database Settings
+HOST=localhost
+PORT=
+USER=
+PASSWORD= 
+'''
